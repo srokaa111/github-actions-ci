@@ -1,5 +1,11 @@
 name: CI pipeline
-on: [workflow_dispatch] # Run it manually from the UI.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
 env:
   DOCKER_USERNAME: 'samson84cc'
   DOCKER_REPO: 'animal-shelter'
@@ -7,6 +13,12 @@ jobs:
   build-job:
     runs-on: ubuntu-latest
     steps: 
-      - name: Hello
-        run: 'echo 👋 Hello ${{ github.actor }} from the GitHub Actions.'
+      - name: Checkout
+        uses: action/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v5
+      - name: Docker
+        run: docker build -t ${{github.repository}}:${{github.sha}} .
+      - name: Test Image
+        run: docker run --rm animal-shelter sh -c "python -m pylint . && python -m pytest tests"
 
