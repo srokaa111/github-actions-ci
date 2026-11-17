@@ -20,5 +20,5 @@ jobs:
       - name: Docker
         run: docker build -t ${{github.repository}}:${{github.sha}} .
       - name: Test Image
-        run: docker run --rm animal-shelter sh -c "python -m pylint . && python -m pytest tests"
+        run: docker run -d ${{github.repository}}:${{github.sha}} sh -c "python -m pylint . && python -m pytest tests"
 
