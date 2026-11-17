@@ -21,6 +21,11 @@ def get_animal(animal_name):
         abort(404, description="Animal not found")
     return jsonify(animal)
 
+@animal_blueprint.route('/animals/habitat/<string:habitat>', methods=['GET'])
+def get_animals_by_habitat(habitat):
+    habitat_animals = {k: v for k,v in animals.items() if v["habitat"].lower() == habitat.lower()}
+    return jsonify(habitat_animals)
+
 
 @animal_blueprint.route('/animals', methods=['POST'])
 def add_animal():

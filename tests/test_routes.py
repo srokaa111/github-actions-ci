@@ -36,3 +36,20 @@ def test_add_animal_missing_field(client):
                          "species": "Giraffa camelopardalis"}
     response = client.post('/api/animals', json=incomplete_animal)
     assert response.status_code == 400
+
+def test_get_savannah_animals(client):
+    response = client.get('/api/animals/habitat/savannah')
+    data = response.get_json()
+    assert response.status_code == 200
+    assert data == {
+        "lion": {
+            "name": "Lion",
+            "species": "Panthera leo",
+            "habitat": "Savannah",
+        },
+        "elephant": {
+            "name": "Elephant",
+            "species": "Loxodonta africana",
+            "habitat": "Savannah",
+        },
+    }
